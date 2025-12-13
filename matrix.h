@@ -1,6 +1,7 @@
 //Ten plik nie powinien byæ edytowany
 
 #pragma once
+#define _USE_MATH_DEFINES
 
 #include<iostream>
 #include<string>
@@ -8,6 +9,7 @@
 #include<fstream>
 #include<random>
 #include<chrono>
+#include<iomanip>
 using namespace std;
 
 #define SEP_SYMBOL ','

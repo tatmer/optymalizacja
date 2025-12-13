@@ -11,5 +11,15 @@ matrix ff1T(matrix, matrix = NAN, matrix = NAN); // Testowa funkcja celu
 matrix ff1R(matrix, matrix = NAN, matrix = NAN); // Rzeczywista funkcja celu (zbiorniki) 
 matrix df1(double, matrix, matrix = NAN, matrix = NAN); // Równania różniczkowe (zbiorniki) 
 
-// --- Laboratorium 2 ---
-matrix ff_lab2_T(matrix, matrix = NAN, matrix = NAN); // Funkcja celu dla laboratorium 2
+// --- Labolatorium 2 ---
+
+matrix ff_lab2_T(matrix, matrix = NAN, matrix = NAN);
+// Zadanie 5b - problem rzeczywisty (robot)
+matrix ff_lab2_R(matrix, matrix = NAN, matrix = NAN);
+matrix df_lab2_R(double, matrix, matrix = NAN, matrix = NAN);
+
+// --- Labolatorium 3 ---
+// --- Laboratorium 3 ---
+matrix ff3T(matrix, matrix = NAN, matrix = NAN); // Funkcja z ograniczeniami
+matrix ff3R(matrix, matrix = NAN, matrix = NAN); // Rzeczywista funkcja celu (piłka)
+matrix df3(double, matrix, matrix = NAN, matrix = NAN); // Równania ruchu (piłka)
