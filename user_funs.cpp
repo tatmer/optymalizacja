@@ -1,5 +1,5 @@
 #include"user_funs.h"
-
+#include <cmath>
 matrix ff0T(matrix x, matrix ud1, matrix ud2)				// funkcja celu dla przypadku testowego
 {
 	matrix y;												// y zawiera warto�� funkcji celu
@@ -313,4 +313,96 @@ matrix ff3R(matrix x, matrix ud1, matrix ud2)
 	if (abs(x_at_50 - 5.0) > 2.0) penalty += pow(abs(x_at_50 - 5.0) - 2.0, 2);
 
 	return matrix(-x_end + c * penalty);
+}
+
+
+
+// ==========================================
+// 1. FUNKCJA TESTOWA
+// ==========================================
+
+matrix func_test(matrix x, matrix ud1, matrix ud2) {
+    double x1 = x(0);
+    double x2 = x(1);
+    // f(x) = 1/6*x1^6 - 1.05*x1^4 + 2*x1^2 + x2^2 + x1*x2
+    double val = (1.0/6.0)*pow(x1, 6) - 1.05*pow(x1, 4) + 2.0*pow(x1, 2) + pow(x2, 2) + x1*x2;
+    return matrix(val);
+}
+
+matrix grad_test(matrix x, matrix ud1, matrix ud2) {
+    matrix g(2, 1);
+    double x1 = x(0);
+    double x2 = x(1);
+    // Gradient analityczny
+    g(0) = pow(x1, 5) - 4.2*pow(x1, 3) + 4.0*x1 + x2;
+    g(1) = 2.0*x2 + x1;
+    return g;
+}
+
+matrix hess_test(matrix x, matrix ud1, matrix ud2) {
+    matrix H(2, 2);
+    double x1 = x(0);
+    // Hesjan analityczny
+    H(0, 0) = 5.0*pow(x1, 4) - 12.6*pow(x1, 2) + 4.0;
+    H(0, 1) = 1.0;
+    H(1, 0) = 1.0;
+    H(1, 1) = 2.0;
+    return H;
+}
+
+// ==========================================
+// 2. PROBLEM RZECZYWISTY
+// ==========================================
+
+// Pomocnicza funkcja sigmoidalna
+double sigmoid(double z) {
+    return 1.0 / (1.0 + exp(-z));
+}
+
+matrix func_real(matrix theta, matrix X, matrix Y) {
+    int m = 100; 
+    
+    double cost = 0.0;
+
+    for (int i = 0; i < m; ++i) {
+        // Oblicz hipotezę h(x) = theta^T * x
+        double z = 0.0;
+        for (int j = 0; j < 3; ++j) {
+            z += theta(j) * X(j, i);
+        }
+        double h = sigmoid(z);
+        
+        // Zabezpieczenie logarytmu
+        if(h < 1e-15) h = 1e-15;
+        if(h > 1.0 - 1e-15) h = 1.0 - 1e-15;
+
+        double y_val = Y(0, i);
+        cost += y_val * log(h) + (1.0 - y_val) * log(1.0 - h);
+    }
+    
+    return matrix(-1.0 / m * cost);
+}
+
+matrix grad_real(matrix theta, matrix X, matrix Y) {
+
+    int m = 100;
+    matrix g(3, 1); 
+    
+    g(0) = 0; g(1) = 0; g(2) = 0;
+
+    for (int i = 0; i < m; ++i) {
+        double z = 0.0;
+        for (int j = 0; j < 3; ++j) {
+            z += theta(j) * X(j, i);
+        }
+        double h = sigmoid(z);
+        
+        double error = h - Y(0, i);
+
+        for (int j = 0; j < 3; ++j) {
+            g(j) += error * X(j, i);
+        }
+    }
+    
+    return (1.0 / m) * g;
 }
